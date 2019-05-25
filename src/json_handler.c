@@ -7,6 +7,36 @@
 #include "../inc/json_inc.h"
 
 
+int remove_whitespace(char *buffer){
+	int pos = 0;
+	int pos_temp = 0;
+	int isValue = 0;
+	char *buff_temp = (char *) malloc (sizeof(char *) * strlen(buffer));
+//	strcpy( buff_temp, buffer);
+	
+	for (; pos < strlen(buffer)+1; pos++){
+		
+		if( buffer[pos] == '\"' ){
+			isValue++;
+		}
+		
+		if( buffer[pos] == ' ' && isValue ==0 ){
+			continue;
+		}
+		
+		if ( buffer[pos] == '\r' || buffer[pos] == '\n' || isValue == 2){
+			isValue = 0;
+		}
+
+		buff_temp[pos_temp++] = buffer[pos];
+	}
+	buff_temp[pos_temp] = '\0';
+	memset(buffer, '\0', pos_temp);
+	strcpy( buffer, buff_temp );
+	
+	return 0;
+}
+
 int get_file_size(char *filename, char *mode){
 	int string_size;
 	FILE *handler = fopen(filename, mode);
@@ -64,16 +94,19 @@ JSON_CONTENT readFile (char *filename, char *mode)
 		json_buff.buffer[json_buff.size] = '\0';
 	}
 	fclose(handler);
-	printf ("\n%s\n", json_buff.buffer);
+	
+	remove_whitespace(json_buff.buffer);
+	json_buff.size = strlen(json_buff.buffer) + 1; // add "\0"
+	
 	return json_buff;
 }
 
 void writeFile (JSON_CONTENT json_buff, char *filename, char *mode) {
 	int write_size;
 	FILE *handler = fopen(filename, mode);
-	
+	printf ("\ncheck\n%s\n", json_buff.buffer);
 	if (handler) {
-		write_size = fwrite(json_buff.buffer, sizeof(char), json_buff.size, handler);
+		write_size = fwrite(json_buff.buffer, sizeof(char), strlen(json_buff.buffer), handler);
 	}
 	
 	fclose(handler);	
