@@ -1,9 +1,0 @@
-{
-"name":"Jonsson",
-"age":"20",
-"test":"20a",
-"test":"20a",
-"test":"20a",
-"test":"20a",
-"nationality":"earth"
-}
