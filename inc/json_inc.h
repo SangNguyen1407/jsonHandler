@@ -31,5 +31,6 @@ void writeFile (JSON_CONTENT json_buff, char *filename, char *mode);
 JSON_CONTENT readFile (char *filename, char *mode);
 int isStringValue (char *stringValue);
 int get_file_size(char *filename, char *mode);
+int remove_whitespace(char *buffer);
 
 #endif
